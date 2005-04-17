@@ -1,0 +1,12 @@
+Revision history for Perl extension EPEG.
+
+0.02  4/15/2005
+	- Revised API to handle opening from data reference and opening 
+	  from a file in new()
+	- Added get_comment(), set_comment()
+	- Added more test cases
+
+0.01  4/13/2005
+	- original version; created by h2xs 1.21 with options
+		-n EPEG /usr/local/include/Epeg.h
+

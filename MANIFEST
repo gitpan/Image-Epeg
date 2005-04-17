@@ -1,0 +1,9 @@
+Changes         History of significant changes
+EPEG.pm         Epeg Interface Perl code
+EPEG.xs         Epeg Interface XS code
+Makefile.PL     The Makefile generator
+MANIFEST
+README
+t/epeg.t
+t/test.jpg
+typemap
