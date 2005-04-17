@@ -1,4 +1,4 @@
-Revision history for Perl extension EPEG.
+Revision history for Perl extension Epeg.
 
 0.02  4/15/2005
 	- Revised API to handle opening from data reference and opening 

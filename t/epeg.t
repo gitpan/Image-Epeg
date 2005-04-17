@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl -w
 
 use strict;
-use Image::EPEG qw(:constants);
+use Image::Epeg qw(:constants);
 
 my @i = stat( "t/test.jpg" );
 my $rawimgsize = $i[7];
@@ -15,7 +15,7 @@ close F;
 
 
 # Test 1: new( [reference] )
-my $epeg = new Image::EPEG( \$f );
+my $epeg = new Image::Epeg( \$f );
 print defined $epeg ? "ok\n" : "nok\n";
 
 # Test 2: get_width()
@@ -41,7 +41,7 @@ print $i[7] == 2858 ? "ok\n" : "nok\n";
 
 
 # Test 6: new( [file] )
-$epeg = new Image::EPEG( "t/test2.jpg" );
+$epeg = new Image::Epeg( "t/test2.jpg" );
 print defined $epeg ? "ok\n" : "nok\n";
 
 # Test 7: get_comment()

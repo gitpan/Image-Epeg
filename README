@@ -1,7 +1,7 @@
-EPEG version 0.01
+Epeg version 0.01
 =================
 
-EPEG is a perl extension for the The Enlightenment Project's EPEG
+Epeg is a perl extension for the The Enlightenment Project's Epeg
 library. It must be installed prior to installing this module.
 
 INSTALLATION

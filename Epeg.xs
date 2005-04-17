@@ -46,7 +46,7 @@ constant(char *name, int len, int arg)
 //	Wrapper
 //
 
-MODULE = Image::EPEG		PACKAGE = Image::EPEG		
+MODULE = Image::Epeg		PACKAGE = Image::Epeg		
 
 
 double

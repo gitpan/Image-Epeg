@@ -1,4 +1,4 @@
-package Image::EPEG;
+package Image::Epeg;
 
 use 5.006;
 use strict;
@@ -15,7 +15,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
 our $VERSION = '0.01';
 
-bootstrap Image::EPEG $VERSION;
+bootstrap Image::Epeg $VERSION;
 
 use constant MAINTAIN_ASPECT_RATIO => 1;
 use constant IGNORE_ASPECT_RATIO => 2;
@@ -29,12 +29,12 @@ sub new
 	if( ref $input eq 'SCALAR' )
 	{
 		# new from data
-		$self->{ img } = Image::EPEG::_epeg_memory_open( $$input, length($$input) );
+		$self->{ img } = Image::Epeg::_epeg_memory_open( $$input, length($$input) );
 	}
 	elsif( $input )
 	{
 		# new from file
-		$self->{ img } = Image::EPEG::_epeg_file_open( $input );
+		$self->{ img } = Image::Epeg::_epeg_file_open( $input );
 	}
 
 	# return undef on a failed open
@@ -68,7 +68,7 @@ sub _init_size
 {
 	my $self = shift; 
 	($self->{ width }, $self->{ height }) =
-		Image::EPEG::_epeg_size_get( $self->img );
+		Image::Epeg::_epeg_size_get( $self->img );
 }
 
 
@@ -76,7 +76,7 @@ sub set_quality
 {
 	my $self = shift;
 	my $quality = shift;
-	Image::EPEG::_epeg_quality_set( $self->img, $quality );
+	Image::Epeg::_epeg_quality_set( $self->img, $quality );
 }
 
 
@@ -84,14 +84,14 @@ sub set_comment
 {
 	my $self = shift;
 	my $comment = shift;
-	Image::EPEG::_epeg_comment_set( $self->img, $comment );
+	Image::Epeg::_epeg_comment_set( $self->img, $comment );
 }
 
 
 sub get_comment
 {
 	my $self = shift;
-	return Image::EPEG::_epeg_comment_get( $self->img );
+	return Image::Epeg::_epeg_comment_get( $self->img );
 }
 
 
@@ -105,7 +105,7 @@ sub resize
 	# ignore the aspect ratio
 	if( $aspect_ratio_mode == IGNORE_ASPECT_RATIO )
 	{
-		Image::EPEG::_epeg_decode_size_set( $self->img, $width, $height );
+		Image::Epeg::_epeg_decode_size_set( $self->img, $width, $height );
 		return 1;
 	}
 
@@ -124,7 +124,7 @@ sub resize
 		$new_w = $width * $w / $h;
 	}
 
-	Image::EPEG::_epeg_decode_size_set( $self->img, $new_w, $new_h );
+	Image::Epeg::_epeg_decode_size_set( $self->img, $new_w, $new_h );
 	return 1;
 }
 
@@ -132,8 +132,8 @@ sub resize
 sub get_data
 {
 	my $self = shift;
-	my $data = Image::EPEG::_epeg_get_data( $self->img );
-	Image::EPEG::_epeg_close( $self->img );
+	my $data = Image::Epeg::_epeg_get_data( $self->img );
+	Image::Epeg::_epeg_close( $self->img );
 	return $data; 
 }
 
@@ -142,8 +142,8 @@ sub write_file
 {
 	my $self = shift;
 	my $path = shift;
-	Image::EPEG::_epeg_write_file( $self->img, $path );
-	Image::EPEG::_epeg_close( $self->img );
+	Image::Epeg::_epeg_write_file( $self->img, $path );
+	Image::Epeg::_epeg_close( $self->img );
 	return 1;
 }
 
@@ -155,12 +155,12 @@ __END__
 
 =head1 NAME
 
-EPEG - Perl extension for EPEG
+Epeg - Perl extension for Epeg
 
 =head1 SYNOPSIS
 
-  use Image::EPEG qw(:constants);
-  my $epg = new Image::EPEG( "test.jpg" );
+  use Image::Epeg qw(:constants);
+  my $epg = new Image::Epeg( "test.jpg" );
   $epg->resize( 150, 150, MAINTAIN_ASPECT_RATIO );
   $epg->write_file( "test_resized.jpg" );
 

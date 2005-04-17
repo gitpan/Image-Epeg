@@ -4,11 +4,11 @@ $ROOT       = "/usr/local";
 
 WriteMakefile
 (
-	'NAME'			=> 'Image::EPEG',
-	'VERSION_FROM'	=> 'EPEG.pm',
+	'NAME'			=> 'Image::Epeg',
+	'VERSION_FROM'	=> 'Epeg.pm',
     'PREREQ_PM'		=> {},
 	($] >= 5.005 ?
-		(ABSTRACT_FROM	=> 'EPEG.pm',
+		(ABSTRACT_FROM	=> 'Epeg.pm',
 		AUTHOR			=> 'Michael Curtis (mcurtis@yahoo-inc.com)') : ()),
 	'LIBS'			=> [''],
 	'LIBS'			=> "-L$ROOT/lib -lepeg" . "$LDLIBS",
