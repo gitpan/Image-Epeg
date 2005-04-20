@@ -6,7 +6,7 @@ use Image::Epeg qw(:constants);
 my @i = stat( "t/test.jpg" );
 my $rawimgsize = $i[7];
 
-print "1..7\n";
+print "1..8\n";
 
 my $f = undef;
 open F, "t/test.jpg";
@@ -48,7 +48,12 @@ print defined $epeg ? "ok\n" : "nok\n";
 print $epeg->get_comment() eq "foobar" ? "ok\n" : "nok\n";
 
 # set_quality() setup
-$epeg->write_file( "t/test2.jpg" );
+$epeg->set_quality( 10 );
+
+# Test 8: get_data()
+$epeg->resize( $epeg->get_height(), $epeg->get_width() );
+my $data = $epeg->get_data();
+print $data && length($data) == 1005 ? "ok\n" : "nok\n";
 
 system "rm t/test2.jpg";
 

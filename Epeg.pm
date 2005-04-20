@@ -13,7 +13,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.01';
+our $VERSION = '0.03';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -155,7 +155,7 @@ __END__
 
 =head1 NAME
 
-Epeg - Perl extension for Epeg
+Epeg - Resize jpegs at lightning speed
 
 =head1 SYNOPSIS
 
@@ -166,13 +166,13 @@ Epeg - Perl extension for Epeg
 
 =head1 DESCRIPTION
 
-Perl wrapper to the alarmingly fast jpeg manipulation library "Epeg".
+Perl wrapper to the ultra-fast jpeg manipulation library "Epeg".
 
 =head2 Methods
 
 =over 4
 
-=item * new( [FILENAME|DATA REFERENCE] )
+=item * new( [filname|data ref] )
 
 =item * get_height()
 
@@ -180,9 +180,13 @@ Perl wrapper to the alarmingly fast jpeg manipulation library "Epeg".
 
 =item * set_quality( [0-100] )
 
-=item * resize( WIDTH, HEIGHT, [Aspect Ratio Mode] )
+=item * set_comment( [comment] )
 
-=item * write_file( FILENAME )
+=item * get_comment()
+
+=item * resize( [width], [height], [Aspect Ratio Mode] )
+
+=item * write_file( [filename] )
 
 =item * get_data()
 
@@ -190,7 +194,7 @@ Perl wrapper to the alarmingly fast jpeg manipulation library "Epeg".
 
 =head1 AUTHOR
 
-Michael Curtis E<lt>mcurtis@yahoo-inc.com<gt>
+Michael Curtis E<lt>mike@beatbot.comE<gt>
 
 =head1 SEE ALSO
 
