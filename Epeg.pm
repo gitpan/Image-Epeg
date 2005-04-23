@@ -111,17 +111,18 @@ sub resize
 
 	# maintain the aspect ratio
 	my ($w, $h) = ($self->get_width(), $self->get_height());
-	my ($new_w, $new_h) = (0, 0);
+	return undef if( $w <= 0 || $h <= 0 );
 
+	my ($new_w, $new_h) = (0, 0);
 	if( $w * $height > $h * $height )
 	{
 		$new_w = $width;
-		$new_h = $height * $h / $w;
+		$new_h = int(($height * $h / $w) + .5);
 	}
 	else
 	{
 		$new_h = $height;
-		$new_w = $width * $w / $h;
+		$new_w = int(($width * $w / $h) + .5);
 	}
 
 	Image::Epeg::_epeg_decode_size_set( $self->img, $new_w, $new_h );

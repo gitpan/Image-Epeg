@@ -36,8 +36,7 @@ print -f "t/test2.jpg" ? "ok\n" : "nok\n";
 
 # Test 5: Expected size? 
 @i = stat( "t/test2.jpg" );
-print $i[7] == 2858 ? "ok\n" : "nok\n";
-
+print $i[7] == 3035 ? "ok\n" : "nok\n";
 
 
 # Test 6: new( [file] )
@@ -53,7 +52,7 @@ $epeg->set_quality( 10 );
 # Test 8: get_data()
 $epeg->resize( $epeg->get_height(), $epeg->get_width() );
 my $data = $epeg->get_data();
-print $data && length($data) == 1005 ? "ok\n" : "nok\n";
+print $data && length($data) == 1083 ? "ok\n" : "nok\n";
 
 system "rm t/test2.jpg";
 
