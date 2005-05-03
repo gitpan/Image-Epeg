@@ -1,5 +1,14 @@
 Revision history for Perl extension Epeg.
 
+0.05  4/27/2005
+	- Modified to catch error codes from epeg_encode() and not 
+	  attempt to free memory twice.
+	- Changed get_data() to return undef on failure.
+	- Changed write_file() to return 1 on success undef on failure.
+	- Changed set_quality() to normalize the input value.
+	- Changed resize() to return undef when attempting to size up
+	  or scale to the same wxh as the original image.
+
 0.04  4/23/2005
 	- Fixed divide by zero error in resize if an image is garbage
 	  and has zero width or height. 

@@ -4,6 +4,6 @@ Epeg.xs         Epeg Interface XS code
 Makefile.PL     The Makefile generator
 MANIFEST
 README
-t/epeg.t
+t/epeg_basic.t
 t/test.jpg
 typemap

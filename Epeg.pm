@@ -13,7 +13,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.03';
+our $VERSION = '0.05';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -76,6 +76,7 @@ sub set_quality
 {
 	my $self = shift;
 	my $quality = shift;
+	$quality = 100 if( $quality < 0 || $quality > 100 );
 	Image::Epeg::_epeg_quality_set( $self->img, $quality );
 }
 
@@ -98,31 +99,33 @@ sub get_comment
 sub resize
 {
 	my $self = shift;
-	my $width = shift;
-	my $height = shift;
+	my $bw = shift;		# boundary width
+	my $bh = shift;		# boundary height
 	my $aspect_ratio_mode = shift || IGNORE_ASPECT_RATIO;
 	
+	# make sure we can resize to this wxh
+	my ($w, $h) = ($self->get_width(), $self->get_height());
+	return undef if( $w <= 0 || $h <= 0 );
+	return undef if( $bw > $w && $bh > $h );
+
 	# ignore the aspect ratio
 	if( $aspect_ratio_mode == IGNORE_ASPECT_RATIO )
 	{
-		Image::Epeg::_epeg_decode_size_set( $self->img, $width, $height );
+		Image::Epeg::_epeg_decode_size_set( $self->img, $bw, $bh );
 		return 1;
 	}
 
 	# maintain the aspect ratio
-	my ($w, $h) = ($self->get_width(), $self->get_height());
-	return undef if( $w <= 0 || $h <= 0 );
-
 	my ($new_w, $new_h) = (0, 0);
-	if( $w * $height > $h * $height )
+	if( $w * $bh < $bw * $h )
 	{
-		$new_w = $width;
-		$new_h = int(($height * $h / $w) + .5);
+		$new_w = int($w * $bh/$h + .5);
+		$new_h = $bh;
 	}
 	else
 	{
-		$new_h = $height;
-		$new_w = int(($width * $w / $h) + .5);
+		$new_w = $bw;
+		$new_h = int($h * $bw/$w + .5);
 	}
 
 	Image::Epeg::_epeg_decode_size_set( $self->img, $new_w, $new_h );
@@ -134,7 +137,8 @@ sub get_data
 {
 	my $self = shift;
 	my $data = Image::Epeg::_epeg_get_data( $self->img );
-	Image::Epeg::_epeg_close( $self->img );
+	Image::Epeg::_epeg_close( $self->img )
+		if( defined $data );
 	return $data; 
 }
 
@@ -143,9 +147,15 @@ sub write_file
 {
 	my $self = shift;
 	my $path = shift;
-	Image::Epeg::_epeg_write_file( $self->img, $path );
-	Image::Epeg::_epeg_close( $self->img );
-	return 1;
+	my $rv = Image::Epeg::_epeg_write_file( $self->img, $path );
+	
+	if( $rv )
+	{
+		Image::Epeg::_epeg_close( $self->img );
+		return 1;
+	}
+	
+	return undef;
 }
 
 
@@ -156,7 +166,7 @@ __END__
 
 =head1 NAME
 
-Epeg - Resize jpegs at lightning speed
+Epeg - Thumbnail jpegs at lightning speed
 
 =head1 SYNOPSIS
 
@@ -167,7 +177,7 @@ Epeg - Resize jpegs at lightning speed
 
 =head1 DESCRIPTION
 
-Perl wrapper to the ultra-fast jpeg manipulation library "Epeg".
+Perl wrapper to the ultra-fast jpeg manipulation library "Epeg". This library can be used to thumbnail (resize down) jpegs, set comments and quality. NOTE: The resize() method *must* be called with valid arguments or get_data() and write_file() will fail.
 
 =head2 Methods
 
@@ -186,6 +196,8 @@ Perl wrapper to the ultra-fast jpeg manipulation library "Epeg".
 =item * get_comment()
 
 =item * resize( [width], [height], [Aspect Ratio Mode] )
+
+The resize() method can only be used to downsize images. If neither the width or height specified is less than the source image it will return undef.
 
 =item * write_file( [filename] )
 

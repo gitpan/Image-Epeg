@@ -145,20 +145,31 @@ _epeg_get_data( img )
 	PREINIT:
 		unsigned char * pOut = NULL;
 		int outSize = 0;
+		int rc;
 	PPCODE:
 		epeg_memory_output_set( img, &pOut, &outSize );
-		epeg_encode( img );
-		PUSHs(sv_2mortal(newSVpv( pOut, outSize )));
-		free(pOut);
+		rc = epeg_encode( img );
+		if( !rc )
+		{
+			PUSHs(sv_2mortal(newSVpv( pOut, outSize )));
+			free(pOut);
+		}
+		else
+		{
+			PUSHs(sv_2mortal(&PL_sv_undef));
+		}
 
 
 void
 _epeg_write_file( img, filename )
 	Epeg_Image * img;
 	const char * filename;
-	CODE:
+	PREINIT:
+		int rc;
+	PPCODE:
 		epeg_file_output_set( img, filename );
-		epeg_encode( img );
+		rc = epeg_encode( img );
+		PUSHs(sv_2mortal( (rc ? &PL_sv_undef : newSViv(1)) ));
 
 
 void
