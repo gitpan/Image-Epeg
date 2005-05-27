@@ -13,7 +13,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -40,6 +40,14 @@ sub new
 	# return undef on a failed open
 	return ref $self->img eq 'Epeg_Image' 
 		? $self : undef;
+}
+
+
+sub DESTROY
+{
+	my $self = shift;
+	Image::Epeg::_epeg_close( $self->img )
+		if( ref $self->img eq 'Epeg_Image' );
 }
 
 
@@ -105,8 +113,11 @@ sub resize
 	
 	# make sure we can resize to this wxh
 	my ($w, $h) = ($self->get_width(), $self->get_height());
-	return undef if( $w <= 0 || $h <= 0 );
-	return undef if( $bw > $w && $bh > $h );
+	if( ($w <= 0 || $h <= 0) ||
+		($bw > $w && $bh > $h) )
+	{
+		return undef;
+	}
 
 	# ignore the aspect ratio
 	if( $aspect_ratio_mode == IGNORE_ASPECT_RATIO )
@@ -137,9 +148,7 @@ sub get_data
 {
 	my $self = shift;
 	my $data = Image::Epeg::_epeg_get_data( $self->img );
-	Image::Epeg::_epeg_close( $self->img )
-		if( defined $data );
-	return $data; 
+	return defined $data ? $data : undef;
 }
 
 
@@ -148,14 +157,7 @@ sub write_file
 	my $self = shift;
 	my $path = shift;
 	my $rv = Image::Epeg::_epeg_write_file( $self->img, $path );
-	
-	if( $rv )
-	{
-		Image::Epeg::_epeg_close( $self->img );
-		return 1;
-	}
-	
-	return undef;
+	return $rv ? 1 : undef;
 }
 
 
