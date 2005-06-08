@@ -13,7 +13,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -46,8 +46,10 @@ sub new
 sub DESTROY
 {
 	my $self = shift;
+
 	Image::Epeg::_epeg_close( $self->img )
-		if( ref $self->img eq 'Epeg_Image' );
+		if( ref($self->img) eq 'Epeg_Image' &&
+			!exists $self->{ failed } );
 }
 
 
@@ -148,7 +150,14 @@ sub get_data
 {
 	my $self = shift;
 	my $data = Image::Epeg::_epeg_get_data( $self->img );
-	return defined $data ? $data : undef;
+
+	if( !defined $data )
+	{
+		$self->{ failed } = 1;
+		return undef;
+	}
+
+	return $data;
 }
 
 
@@ -157,7 +166,14 @@ sub write_file
 	my $self = shift;
 	my $path = shift;
 	my $rv = Image::Epeg::_epeg_write_file( $self->img, $path );
-	return $rv ? 1 : undef;
+	
+	if( !$rv )
+	{
+		$self->{ failed } = 1;
+		return undef;
+	}
+
+	return 1;
 }
 
 
