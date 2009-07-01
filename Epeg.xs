@@ -1,3 +1,5 @@
+#include "epeg/src/lib/epeg_main.c"
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -5,63 +7,24 @@ extern "C"
 	#include "EXTERN.h"
 	#include "perl.h"
 	#include "XSUB.h"
+	#include "ppport.h"
 	#ifdef __cplusplus
 }
 #endif
 
-static char *CLASS = 0;
+/*
+ *	Epeg Headers
+ */
 
+#include "epeg/src/lib/Epeg.h"
 
-
-//
-//	Epeg Headers
-//
-
-#include </usr/local/include/Epeg.h>
-
-
-static int
-not_here(char *s)
-{
-    croak("%s not implemented on this architecture", s);
-    return -1;
-}
-
-
-
-//
-//	Constants
-//
-
-static double
-constant(char *name, int len, int arg)
-{
-    errno = EINVAL;
-    return 0;
-}
-
-
-
-//
-//	Wrapper
-//
+/*
+ *	Wrapper
+ */
 
 MODULE = Image::Epeg		PACKAGE = Image::Epeg		
 
-
-double
-constant(sv,arg)
-    PREINIT:
-		STRLEN len;
-    INPUT:
-		SV * sv
-		char * s = SvPV(sv, len);
-		int arg
-    CODE:
-		RETVAL = constant(s,len,arg);
-    OUTPUT:
-		RETVAL
-
+PROTOTYPES: disable
 
 Epeg_Image *
 _epeg_file_open( filename )
@@ -69,7 +32,6 @@ _epeg_file_open( filename )
 	PREINIT:
 		int h, w;
 	CODE:
-		CLASS = "Epeg_Image";
 		RETVAL = (Epeg_Image *)epeg_file_open( filename );
 	OUTPUT:
 		RETVAL
@@ -80,7 +42,6 @@ _epeg_memory_open( data, dataLen );
 	unsigned char * data;
 	int dataLen;
 	CODE:
-		CLASS = "Epeg_Image";
 		RETVAL = (Epeg_Image *)epeg_memory_open( data, dataLen );
 	OUTPUT:
 		RETVAL
@@ -151,7 +112,7 @@ _epeg_get_data( img )
 		rc = epeg_encode( img );
 		if( !rc )
 		{
-			PUSHs(sv_2mortal(newSVpv( pOut, outSize )));
+			PUSHs(sv_2mortal(newSVpv( (char*)pOut, outSize )));
 			free(pOut);
 		}
 		else

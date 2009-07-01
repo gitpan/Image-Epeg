@@ -1,6 +1,6 @@
 package Image::Epeg;
 
-use 5.006;
+use 5.008001;
 use strict;
 use warnings;
 use Carp;
@@ -13,7 +13,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -184,7 +184,7 @@ __END__
 
 =head1 NAME
 
-Epeg - Thumbnail jpegs at lightning speed
+Image::Epeg - Thumbnail jpegs at lightning speed
 
 =head1 SYNOPSIS
 
@@ -201,7 +201,7 @@ Perl wrapper to the ultra-fast jpeg manipulation library "Epeg". This library ca
 
 =over 4
 
-=item * new( [filname|data ref] )
+=item * new( [filename|data ref] )
 
 =item * get_height()
 
@@ -227,8 +227,10 @@ The resize() method can only be used to downsize images. If neither the width or
 
 Michael Curtis E<lt>mike@beatbot.comE<gt>
 
+Tokuhiro Matsuno E<lt>tokuhirom at gmail dot comE<gt>
+
 =head1 SEE ALSO
 
-L<http://gatekeeper.dec.com/pub/BSD/NetBSD/NetBSD-current/pkgsrc/graphics/epeg/README.html>
+L<http://svn.enlightenment.org/svn/e/trunk/OLD/epeg/>
 
 =cut
