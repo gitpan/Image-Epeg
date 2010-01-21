@@ -12,7 +12,7 @@ print "# GD            $GD::VERSION\n";
 print "# Image::Magick $Image::Magick::VERSION\n";
 
 my $srcfile = shift or die "Usage: $0 fname";
-my $src = Image::Epeg->new($srcfile) or die "$srcfile is not a jpeg file";
+my $src = Image::Epeg->new($srcfile);
 print "# origsize: @{[ $src->get_width ]} x @{[ $src->height ]}\n";
 my $width = int($src->get_width * 0.4);
 my $height = int($src->get_height * 0.4);
@@ -55,8 +55,7 @@ timethese(
         ),
         imagemagick => sub {
             my $img = Image::Magick->new;
-            my $x = $img->Read($srcfile);
-            die "$x" if $x;
+            $img->Read($srcfile);
             $img->Resize(
                 width  => $width,
                 height => $height,
@@ -65,8 +64,7 @@ timethese(
         },
         "imagemagick-lanczos" => sub {
             my $img = Image::Magick->new;
-            my $x = $img->Read($srcfile);
-            die "$x" if $x;
+            $img->Read($srcfile);
             $img->Resize(
                 width  => $width,
                 height => $height,

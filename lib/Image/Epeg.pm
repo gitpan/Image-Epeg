@@ -7,13 +7,12 @@ use Carp;
 
 require Exporter;
 require DynaLoader;
-use AutoLoader;
 
 our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -57,6 +56,9 @@ sub img		{ return $_[0]->{ img }; }
 sub height	{ return $_[0]->{ height }; }
 sub width	{ return $_[0]->{ width }; }
 
+sub output_height   { return $_[0]->{ output_height }; }
+sub output_width	{ return $_[0]->{ output_width }; }
+
 
 sub get_height
 {
@@ -79,6 +81,29 @@ sub _init_size
 	my $self = shift; 
 	($self->{ width }, $self->{ height }) =
 		Image::Epeg::_epeg_size_get( $self->img );
+}
+
+sub get_output_height
+{
+	my $self = shift;
+	$self->_init_output_size() unless( $self->output_height );
+	return $self->output_height;
+}
+
+
+sub get_output_width
+{
+	my $self = shift;
+	$self->_init_output_size() unless( $self->output_width );
+	return $self->output_width;
+}
+
+
+sub _init_output_size
+{
+	my $self = shift; 
+	($self->{ output_width }, $self->{ output_height }) =
+		Image::Epeg::_epeg_output_size_get( $self->img );
 }
 
 
@@ -125,6 +150,7 @@ sub resize
 	if( $aspect_ratio_mode == IGNORE_ASPECT_RATIO )
 	{
 		Image::Epeg::_epeg_decode_size_set( $self->img, $bw, $bh );
+        $self->_init_output_size;
 		return 1;
 	}
 
@@ -142,6 +168,7 @@ sub resize
 	}
 
 	Image::Epeg::_epeg_decode_size_set( $self->img, $new_w, $new_h );
+    $self->_init_output_size;
 	return 1;
 }
 
@@ -227,7 +254,11 @@ The resize() method can only be used to downsize images. If neither the width or
 
 Michael Curtis E<lt>mike@beatbot.comE<gt>
 
-Tokuhiro Matsuno E<lt>tokuhirom at gmail dot comE<gt>
+Tokuhiro Matsuno
+
+=head1 THANKS TO
+
+chiba
 
 =head1 SEE ALSO
 
