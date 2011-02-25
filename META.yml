@@ -1,14 +1,18 @@
 ---
 abstract: 'Thumbnail jpegs at lightning speed'
 author:
+  - 'Michael Curtis <mike@beatbot.com>'
   - 'Michael Curtis (mcurtis@yahoo-inc.com)'
 build_requires:
+  Devel::PPPort: 3.19
   ExtUtils::MakeMaker: 6.42
+  ExtUtils::ParseXS: 2.21
   Test::More: 0.94
 configure_requires:
+  Devel::PPPort: 3.19
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+generated_by: 'Module::Install version 1.00'
 license: unknown
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -20,5 +24,8 @@ no_index:
     - t
     - xt
 requires:
+  XSLoader: 0.1
   perl: 5.8.1
-version: 0.10
+resources:
+  repository: git://github.com/tokuhirom/image-epeg.git
+version: 0.11
