@@ -12,7 +12,7 @@ our @ISA = qw(Exporter DynaLoader);
 our %EXPORT_TAGS = ( 'constants' => [ qw(MAINTAIN_ASPECT_RATIO IGNORE_ASPECT_RATIO) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'constants'} } );
 our @EXPORT = qw();
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 bootstrap Image::Epeg $VERSION;
 
@@ -259,6 +259,11 @@ Tokuhiro Matsuno
 =head1 THANKS TO
 
 chiba
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
